@@ -1,0 +1,313 @@
+\documentclass[12pt, letterpaper]{article}
+\usepackage[left=2.5cm,right=2.5cm, top=2.5cm, bottom=2.5cm]{geometry}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhead[R]{Flaherty, \thepage}
+\renewcommand{\headrulewidth}{2pt}
+\setlength{\headheight}{15pt}
+\usepackage{lipsum}
+\usepackage{amsmath}
+\usepackage[makeroom]{cancel}
+\usepackage{cancel}
+\usepackage{array,polynom}
+\newcolumntype{C}{>{{}}c<{{}}} % for '+' and '-' symbols
+\newcolumntype{R}{>{\displaystyle}r} % automatic display-style math mode 
+\usepackage{xcolor}
+\newcommand\Ccancel[2][black]{\renewcommand\CancelColor{\color{#1}}\cancel{#2}}
+% Define a custom environment for examples with an indent
+
+\newenvironment{ex}{
+	\par\smallskip % Add some vertical space before the example
+	\noindent\textit{Example:\hspace{-0.25em}}
+	\leftskip=0.5em % Set the left indent to 1em (adjust as needed)
+}{
+	\par\smallskip % Add some vertical space after the example
+	\leftskip=0em % Reset the left indent
+}
+
+\newenvironment{nonex}{
+	\par\smallskip % Add some vertical space before the example
+	\noindent\textit{Non-example:\hspace{-0.25em}}
+	\leftskip=0.5em % Set the left indent to 1em (adjust as needed)
+}{
+	\par\smallskip % Add some vertical space after the example
+	\leftskip=0em % Reset the left indent
+}
+\newcommand{\mymatrix}[1]{
+	\renewcommand{\arraystretch}{0.5} % Adjust vertical spacing%
+	\setlength\arraycolsep{3pt}       % Adjust horizontal spacing%
+	\scalebox{0.90}{                  % Change font size%
+		$\begin{bmatrix}
+			#1
+		\end{bmatrix}$
+	}                   
+	\renewcommand{\arraystretch}{1.0} % Reset vertical spacing
+	\setlength\arraycolsep{6pt}       %Adjust horizontal spacing%
+}
+
+\usepackage{amssymb}
+\usepackage{bbm}
+\usepackage{mathrsfs}
+\usepackage[toc]{glossaries}
+\usepackage{amsthm}
+\usepackage{indentfirst}
+\usepackage[utf8]{inputenc}
+\usepackage[thinc]{esdiff}
+\usepackage{graphicx}
+\graphicspath{{./images/}}
+\usepackage{subfig}
+\usepackage{chngcntr}
+\usepackage{placeins}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{comment}
+\usepackage{sectsty}
+\sectionfont{\fontsize{15}{15}\selectfont}
+\usepackage{subcaption}
+\setlength\abovedisplayskip{0pt}
+\usepackage[hidelinks]{hyperref}
+\usepackage[nottoc,numbib]{tocbibind}
+\renewcommand{\qedsymbol}{\rule{0.7em}{0.7em}}
+\newcommand{\Mod}[1]{\ (\mathrm{mod}\ #1)}
+\counterwithin{figure}{section}
+\usepackage{centernot}
+\usepackage{enumitem}
+\theoremstyle{definition}
+\newtheorem{exmp}{Example}
+\newtheorem{nonexmp}{Non-Example}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{definition}{Definition}[section]
+\newtheorem{lemma}{Lemma}[theorem]
+\numberwithin{equation}{section}
+\newcommand{\mydef}[1]{(Definition \ref{#1}, Page \pageref{#1})}
+\newcommand{\mytheorem}[1]{(Theorem \ref{#1}, Page \pageref{#1})}
+\newcommand{\mylemma}[1]{(Lemma \ref{#1}, Page \pageref{#1})}
+\newcommand{\clickableword}[2]{\hyperref[#1]{#2}}
+
+%underscript for operations%
+\newcommand{\+}[1]{+_{\scalebox{.375}{#1}}}
+\newcommand{\mult}[1]{\cdot_{\scalebox{.375}{#1}}}
+
+%blackboard for letters%
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\V}{\mathbb{V}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\K}{\mathbb{K}}
+\newcommand{\1}{\mathbbm{1}}
+\newcommand{\Prob}{\mathbb{P}}
+
+\title{Time Series HW \# 5}
+\author{Liam Flaherty}
+\date{\parbox{\linewidth}{\centering%
+		Professor Martin\endgraf\bigskip
+		NCSU: ST534-001\endgraf\bigskip
+		October 7, 2024 \endgraf}}
+
+\begin{document}
+\maketitle
+\thispagestyle{empty}
+
+\newpage\clearpage\noindent
+
+
+\noindent\textbf{1) \boldmath{Analyze the fourth data set on Moodle.}}
+
+\vspace{\baselineskip}
+\noindent\textbf{\boldmath{a. Determine possible models for the data set using diagnostics such as the ACF, PACF, and white noise test. Include a unit root test and discuss those results as well.}}
+\vspace{\baselineskip}
+
+Our first step is to plot the data, which we do in Figure \ref{data4} below.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=12cm]{data4}
+	\caption{Data Set 4 Time Series}
+	\label{data4}
+\end{figure}
+
+The Ljung-Box White Noise test has a p-value on the order of machine-epsilon for lags of 6 and 12 (see Figure \ref{White Noise Data4} below)-- we need to fit a model.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=8cm]{White Noise Data 4}
+	\caption{White Noise Test For Data Set 4}
+	\label{White Noise Data4}
+\end{figure} 
+\vspace{\baselineskip}
+
+The Augmented-Dickey Fuller test in Figure \ref{ADF D4} suggests that we might need to take a difference.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=8cm]{ADF D4}
+	\caption{Augmented-Dickey Fuller Test (Unit Root Test)}
+	\label{ADF D4}
+\end{figure}
+
+After doing so, our ACF and PACF for the differenced data are shown in Figure \ref{ACF D4 Diff}. Notice that neither the ACF nor PACF seems to completely die off.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=12cm]{ACF D4 Diff}
+	\caption{ACF And PACF Of Differenced Data}
+	\label{ACF D4 Diff}
+\end{figure}
+
+Again performing the white-noise test, this time on the differenced series, we see that the model is not distinguishable from white noise in Figure \ref{White Noise Data 4 Diff}.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=12cm]{White Noise Data 4 Diff}
+	\caption{White Noise Test For Differenced Data}
+	\label{White Noise Data 4 Diff}
+\end{figure}
+
+Our assessment of the model agrees with the \texttt{auto.arima()} function from R's \texttt{forecast} package; it recommends an ARIMA(0,1,0) model.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=8cm]{Auto ARIMA D4}
+	\caption{auto.arima() For Data Set 4}
+	\label{Auto ARIMA D4}
+\end{figure}
+
+
+
+
+
+
+\newpage
+\noindent\textbf{\boldmath{b. Fit the models that you identified as good possibilities and compare their fits using output diagnostics such as the residual test for white noise, AIC, SBC, etc.}}
+\vspace{\baselineskip}
+
+Just for thoroughness, we test a few different models up to order 3 in Figure \ref{R Code To Derive Model Diagnostics}.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=12cm]{Data 4 All Models}
+	\caption{R Code To Derive Model Diagnostics}
+	\label{R Code To Derive Model Diagnostics}
+\end{figure}
+
+Figure \ref{Model Diagnostics For Dataset 4} below sorts our diagnostics from lowest to highest AIC values.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=6cm]{Model Diagnostics Data 4}
+	\caption{Model Diagnostics For Data Set 4}
+	\label{Model Diagnostics For Dataset 4}
+\end{figure}
+
+In terms of AIC, the ARIMA(0,1,0) is actually one of the worst performing models. If one model had to be chosen, we would prefer the ARIMA(1,0,0) for the sake of parsimony. It is only slightly worse than the ARIMA(1,1,1) model (the combined difference in AIC and BIC in the two models is less than 0.5) while having a higher Ljung-Box p-value and two less parameters.
+
+
+
+
+
+
+\newpage
+\noindent\textbf{2) \boldmath{Analyze the quarterly beer data set on Moodle.}}
+
+\vspace{\baselineskip}
+\noindent\textbf{\boldmath{a. Determine possible models for the data using diagnostics such as the ACF and white noise test. Include a unit root test and discuss those results as well.}}
+\vspace{\baselineskip}
+
+Our first step is to plot the data, which we do in Figure \ref{beer} below.
+
+\vspace{-0.35cm}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=10cm]{beer}
+	\caption{Quarterly Beer Time Series}
+	\label{beer}
+\end{figure}
+
+
+It is clear from inspection that we have seasonal data with period 4. We are dealing with a limited amount of data (thirty-two total observations with a period of 4 means 8 seasonal observations), but at least visually, it seems that the series is trending; all but one of the seven points is larger than it's previous value. Applying the Augmented Dickey-Fuller Test at seasonal increments provides evidence for the alternative hypothesis that the seasonal lags are actually stationary. This is shown in Figure \ref{Beer Seasonal Difference Plot} below along with the differenced plot. We will test both when building our models.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=12cm]{Beer Seasonal Difference}
+	\label{Beer Seasonal Difference}
+\end{figure}
+\vspace{-0.5cm}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=10cm]{Beer Seasonal Difference Plot}
+	\caption{Quarterly Beer Time Series After Seasonal Difference}
+	\label{Beer Seasonal Difference Plot}
+\end{figure}
+
+
+\newpage
+Our initial ACF and PACF plots are shown in Figure \ref{ACF Beer} below. The seasonal lags in the ACF plot seem to quickly die out while the first seasonal lag in the PACF seems pronounced and subsequently cuts off. A natural choice for the seasonal portion of the model is an MA(1).
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=13cm]{ACF Beer}
+	\caption{ACF And PACF Of Quarterly Beer}
+	\label{ACF Beer}
+\end{figure}
+
+We can also look at the ACF and PACF after taking a seasonal difference. This is shown in Figure \ref{Beer ACF Seasonal Diff}. Notice that the ACF has a semi-gradual sinusoidal decay, and the PACF cuts off after the first seasonal lag. An argument could be made that neigher really cuts off but instead gradually decays. From that perspective, some choices for the seasonal portion could be an ARIMA(1,1,0), and ARIMA(0,1,1), or an ARIMA(1,1,1)
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=13cm]{Beer ACF Seasonal Diff}
+	\caption{ACF And PACF After Seasonal Difference}
+	\label{Beer ACF Seasonal Diff}
+\end{figure}
+
+\newpage
+We now try to determine the non-seasonal part of the model. We can test if a difference is needed by using the Augmented Dickey-Fuller test. Under any reasonable alpha level, we fail to reject the null hypothesis of "there is a unit root". The results are shown in Figure \ref{Beer ADF} below.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=10cm]{Beer ADF}
+	\caption{ADF For Beer Data}
+	\label{Beer ADF}
+\end{figure}
+
+The ACF and PACF, after taking a difference, are shown in Figure \ref{Beer ACF Reg Diff} below. Notice that the ACF dies out immediately, while the PACF cuts off after the third lag.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=12cm]{Beer ACF Reg Diff}
+	\caption{ACF And PACF After Regular Difference}
+	\label{Beer ACF Reg Diff}
+\end{figure}
+
+Taken together, we have a couple of models that might be good fits: an ARIMA(0,1,3)(0,0,1), an ARIMA(0,1,3)(1,1,0), an ARIMA(0,1,3)(0,1,1), and an ARIMA(0,1,3)(1,1,1) all seem reasonable.
+
+
+
+\newpage
+\noindent\textbf{\boldmath{b. Fit the models that you identified as good possibilities and compare their fits using output diagnostics such as the residual test for white noise, AIC, SBC, etc.}}
+\vspace{\baselineskip}
+
+For thoroughness, we test all models with $p,q, P, \text{ and } Q$ terms less than 4 with $d$ and $D$ terms less than 2. The script to run this is shown in Figure \ref{Beer Model Fit Script} below.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=12cm]{Beer Model Fit Script}
+	\caption{Script For Fitting Models}
+	\label{Beer Model Fit Script}
+\end{figure}
+
+The top ten models in terms of AIC are shown in Figure \ref{Beer Model Selection} below. Of the models we planned to test in part 2a, the ARIMA(0,1,3)(1,1,1) actually was the second best model overall. Right behind was our ARIMA(0,1,3)(0,1,1) model. Since the data was so short, the marginally better AIC and BIC from the model with a second seasonal MA term is not as convincing as the ARIMA(0,1,3)(1,1,1) we proposed. For that reason, we would prefer that model best of all. 
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=8cm]{Beer Model Selection}
+	\caption{Model Selection Criteria For Beer Data}
+	\label{Beer Model Selection}
+\end{figure}
+
+
+
+
+\end{document}
